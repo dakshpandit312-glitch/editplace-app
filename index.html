@@ -1,74 +1,15 @@
-<!-- Firebase की असली फाइल्स (इसे </body> से ठीक पहले डालें) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- सारा CSS यहाँ है -->
+</head>
+<body>
+    <!-- लॉगिन और साइनअप के DIVs यहाँ हैं -->
 
-<script>
-    // 1. आपका असली Firebase Config (फोटो से लिया गया)
-    const firebaseConfig = {
-        apiKey: "AIzaSyBDZ9OxaB0Wk7v0h5ZqwgXRcP0Bdq_Jehg",
-        authDomain: "editplace.firebaseapp.com",
-        projectId: "editplace",
-        storageBucket: "editplace.firebasestorage.app",
-        messagingSenderId: "21549352163",
-        appId: "1:21549352163:web:f10232d465a309d352f1d6",
-        measurementId: "G-DKLXKNFB1H"
-    };
-
-    // 2. Firebase को चालू करें
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // फॉर्म स्विच करने का फंक्शन
-    function toggleForms() {
-        const loginForm = document.getElementById('login-form');
-        const signupForm = document.getElementById('signup-form');
-        if (loginForm.style.display === 'none') {
-            loginForm.style.display = 'block';
-            signupForm.style.display = 'none';
-        } else {
-            loginForm.style.display = 'none';
-            signupForm.style.display = 'block';
-        }
-    }
-
-    // 3. असली Sign Up (नया अकाउंट बनाना)
-    function signupDemo() {
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        const name = document.getElementById('signup-name').value;
-
-        if(email === "" || password === "") {
-            alert("Please enter email and password!");
-            return;
-        }
-
-        // Firebase को अकाउंट बनाने का कमांड
-        auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            alert("Account created successfully for " + name + "! Welcome to Editplace.");
-        })
-        .catch((error) => {
-            alert("Error: " + error.message);
-        });
-    }
-
-    // 4. असली Login
-    function loginDemo() {
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-
-        if(email === "" || password === "") {
-            alert("Please enter email and password!");
-            return;
-        }
-
-        // Firebase को लॉगिन करने का कमांड
-        auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            alert("Login Success! Welcome back.");
-        })
-        .catch((error) => {
-            alert("Login Failed: " + error.message);
-        });
-    }
-</script>
+    <!-- यहाँ Firebase का स्क्रिप्ट वाला हिस्सा है -->
+    <script src="..."></script>
+    <script>
+       // पूरा JavaScript कोड
+    </script>
+</body>
+</html>
