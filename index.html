@@ -1,164 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-width=1.0">
-    <title>EditFlow - Login & Signup</title>
-    <style>
-        /* डार्क थीम और नियॉन स्टाइलिंग */
-        :root {
-            --bg-color: #0d0d12;
-            --card-bg: #1a1a24;
-            --text-main: #ffffff;
-            --text-muted: #a0a0b5;
-            --neon-blue: #00f3ff;
-            --neon-purple: #b026ff;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-            height: 100vh;
-        }
-
-        /* मोबाइल लेआउट कंटेनर */
-        #auth-container { 
-            width: 100%; 
-            max-width: 400px; 
-            background-color: var(--card-bg); 
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
-            border: 1px solid #2a2a35;
-            text-align: center;
-        }
-
-        h1 { 
-            font-size: 2rem; 
-            margin-bottom: 5px; 
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-
-        p.subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; }
-
-        /* फॉर्म इनपुट्स */
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; }
-        .input-group input, .input-group select { 
-            width: 100%; 
-            padding: 12px; 
-            border-radius: 10px; 
-            border: 1px solid #2a2a35; 
-            background-color: #0d0d12; 
-            color: var(--text-main); 
-            outline: none; 
-            transition: 0.3s;
-        }
-        .input-group input:focus, .input-group select:focus { border-color: var(--neon-blue); }
-
-        /* सबमिट बटन */
-        .auth-btn { 
-            width: 100%; 
-            padding: 14px; 
-            border: none; 
-            border-radius: 10px; 
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); 
-            color: white; 
-            font-weight: bold; 
-            font-size: 1.1rem;
-            cursor: pointer; 
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(176, 38, 255, 0.3);
-        }
-
-        /* टॉगल लिंक */
-        .toggle-link { 
-            margin-top: 20px; 
-            font-size: 0.9rem; 
-            color: var(--text-muted); 
-        }
-        .toggle-link span { 
-            color: var(--neon-blue); 
-            cursor: pointer; 
-            font-weight: bold; 
-        }
-
-        /* फॉर्म स्विचिंग लॉजिक के लिए */
-        #signup-form { display: none; }
-    </style>
-</head>
-<body>
-
-<div id="auth-container">
-    
-    <!-- LOGIN FORM -->
-    <div id="login-form">
-        <h1>Welcome Back</h1>
-        <p class="subtitle">Login to your EditFlow account</p>
-        
-        <div class="input-group">
-            <label>Email Address</label>
-            <input type="email" placeholder="e.g. hello@example.com" id="login-email">
-        </div>
-        
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" placeholder="••••••••" id="login-password">
-        </div>
-        
-        <button class="auth-btn" onclick="loginDemo()">Login</button>
-        
-        <p class="toggle-link">Don't have an account? <span onclick="toggleForms()">Sign Up</span></p>
-    </div>
-
-    <!-- SIGNUP FORM -->
-    <div id="signup-form">
-        <h1>Create Account</h1>
-        <p class="subtitle">Join as a Client or Editor</p>
-        
-        <div class="input-group">
-            <label>Full Name / Studio Name</label>
-            <input type="text" placeholder="e.g. NeoCut Studio" id="signup-name">
-        </div>
-
-        <div class="input-group">
-            <label>Email Address</label>
-            <input type="email" placeholder="Enter your email" id="signup-email">
-        </div>
-        
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" placeholder="Create a strong password" id="signup-password">
-        </div>
-
-        <div class="input-group">
-            <label>I want to:</label>
-            <select id="signup-role">
-                <option value="editor">Work as an Editor</option>
-                <option value="client">Hire Editors (Client)</option>
-            </select>
-        </div>
-        
-        <button class="auth-btn" onclick="signupDemo()">Create Account</button>
-        
-        <p class="toggle-link">Already have an account? <span onclick="toggleForms()">Login</span></p>
-    </div>
-
-</div>
+<!-- Firebase की असली फाइल्स (इसे </body> से ठीक पहले डालें) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
 <script>
-    // Login और Signup फॉर्म के बीच स्विच करने का फंक्शन
+    // 1. आपका असली Firebase Config (फोटो से लिया गया)
+    const firebaseConfig = {
+        apiKey: "AIzaSyBDZ9OxaB0Wk7v0h5ZqwgXRcP0Bdq_Jehg",
+        authDomain: "editplace.firebaseapp.com",
+        projectId: "editplace",
+        storageBucket: "editplace.firebasestorage.app",
+        messagingSenderId: "21549352163",
+        appId: "1:21549352163:web:f10232d465a309d352f1d6",
+        measurementId: "G-DKLXKNFB1H"
+    };
+
+    // 2. Firebase को चालू करें
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // फॉर्म स्विच करने का फंक्शन
     function toggleForms() {
         const loginForm = document.getElementById('login-form');
         const signupForm = document.getElementById('signup-form');
-        
         if (loginForm.style.display === 'none') {
             loginForm.style.display = 'block';
             signupForm.style.display = 'none';
@@ -168,28 +31,44 @@
         }
     }
 
-    // लॉगिन बटन का डेमो फंक्शन
+    // 3. असली Sign Up (नया अकाउंट बनाना)
+    function signupDemo() {
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const name = document.getElementById('signup-name').value;
+
+        if(email === "" || password === "") {
+            alert("Please enter email and password!");
+            return;
+        }
+
+        // Firebase को अकाउंट बनाने का कमांड
+        auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            alert("Account created successfully for " + name + "! Welcome to Editplace.");
+        })
+        .catch((error) => {
+            alert("Error: " + error.message);
+        });
+    }
+
+    // 4. असली Login
     function loginDemo() {
         const email = document.getElementById('login-email').value;
-        if(email === "") {
-            alert("Please enter your email!");
-            return;
-        }
-        alert("Success! Logging you in...");
-        // असली ऐप में यहाँ से Firebase Authentication का कोड कॉल होता है।
-    }
+        const password = document.getElementById('login-password').value;
 
-    // साइनअप बटन का डेमो फंक्शन
-    function signupDemo() {
-        const name = document.getElementById('signup-name').value;
-        if(name === "") {
-            alert("Please enter your name!");
+        if(email === "" || password === "") {
+            alert("Please enter email and password!");
             return;
         }
-        alert("Account created successfully for " + name + "!");
-        // असली ऐप में यहाँ से नया यूज़र Firebase में सेव होता है।
+
+        // Firebase को लॉगिन करने का कमांड
+        auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            alert("Login Success! Welcome back.");
+        })
+        .catch((error) => {
+            alert("Login Failed: " + error.message);
+        });
     }
 </script>
-
-</body>
-</html>
