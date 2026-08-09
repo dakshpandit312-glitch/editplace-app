@@ -1,7 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editplace - Job Portal</title>
+    <style>
+        body { background: #0d0d12; color: white; font-family: sans-serif; margin: 0; }
+        .container { padding: 20px; }
+        .card { background: #1a1a24; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #2a2a35; }
+        .btn { background: linear-gradient(90deg, #00f3ff, #b026ff); border: none; padding: 12px; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+        #home-screen, #signup-screen { display: none; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #333; background: #0d0d12; color: white; }
+        .link { color: #00f3ff; cursor: pointer; text-decoration: underline; }
+        .msg-box { margin-top: 15px; font-weight: bold; text-align: center; min-height: 20px; }
+    </style>
+</head>
 <body>
-    <h1 style="color:white; text-align:center;">अगर यह दिख रहा है तो साइट चल रही है</h1>
-    <button onclick="alert('बटन काम कर रहा है!')" style="padding:20px; width:100%;">इसे दबाकर चेक करें</button>
+
+<!-- LOGIN SCREEN -->
+<div id="auth-screen" class="container">
+    <h1>Login to Editplace</h1>
+    <input type="email" id="l-email" placeholder="Email">
+    <input type="password" id="l-pass" placeholder="Password">
+    <button type="button" class="btn" onclick="login()">Login</button>
+    <p>Don't have an account? <span class="link" onclick="showSignup()">Sign Up</span></p>
+    <div id="msg-box-login" class="msg-box"></div>
+</div>
+
+<!-- SIGNUP SCREEN -->
+<div id="signup-screen" class="container">
+    <h1>Create Account</h1>
+    <input type="email" id="s-email" placeholder="Email">
+    <input type="password" id="s-pass" placeholder="Password">
+    <button type="button" class="btn" onclick="signup()">Register</button>
+    <p>Already have an account? <span class="link" onclick="showLogin()">Login</span></p>
+    <div id="msg-box-signup" class="msg-box"></div>
+</div>
+
+<!-- HOME SCREEN -->
+<div id="home-screen" class="container">
+    <h2>Welcome to Editplace</h2>
+    <div class="card">
+        <h3>Find Jobs</h3>
+        <input type="text" placeholder="Enter City...">
+        <button type="button" class="btn">Search Jobs</button>
+    </div>
+    <button type="button" onclick="logout()" class="btn" style="background:#444;">Logout</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script>
+    // 👇 बस यहाँ अपनी असली API Key डालें 👇
+    const firebaseConfig = {
+        apiKey: "const firebaseConfig = {
+    apiKey: "AIzaSyDj9R7uXAKLSNo285S79c2Se2nnDbnfvu0",
+    authDomain: "editplace-11022.firebaseapp.com",
+    projectId: "editplace-11022",
+    storageBucket: "editplace-11022.firebasestorage.app",
+    messagingSenderId: "921066673801",
+    appId: "1:921066673801:web:fd4c3f90991a5828131858"
+  };", 
+        authDomain: "editplace.firebaseapp.com",
+        projectId: "editplace",
+        storageBucket: "editplace.firebasestorage.app",
+        messagingSenderId: "21549352163",
+        appId: "1:21549352163:web:f10232d465a309d352f1d6"
+    };
+
+    try { firebase.initializeApp(firebaseConfig); } 
+    catch(e) { document.getElementById('msg-box-login').innerText = "Firebase Error: " + e.message; }
+    
+    const auth = firebase.auth();
+
+    function showSignup() { 
+        document.getElementById('auth-screen').style.display='none'; 
+        document.getElementById('signup-screen').style.display='block'; 
+        document.getElementById('msg-box-signup').innerText = '';
+    }
+    function showLogin() { 
+        document.getElementById('signup-screen').style.display='none'; 
+        document.getElementById('auth-screen').style.display='block'; 
+        document.getElementById('msg-box-login').innerText = '';
+    }
+
+    function signup() {
+        const e = document.getElementById('s-email').value;
+        const p = document.getElementById('s-pass').value;
+        const msgBox = document.getElementById('msg-box-signup');
+        if (!e || !p) { msgBox.style.color = "#ff4d4d"; msgBox.innerText = "Please enter email and password"; return; }
+        
+        msgBox.style.color = "#00f3ff"; msgBox.innerText = "Processing...";
+        auth.createUserWithEmailAndPassword(e, p)
+        .then(() => { msgBox.style.color = "#00ff00"; msgBox.innerText = "Account Created! Now login."; })
+        .catch(err => { msgBox.style.color = "#ff4d4d"; msgBox.innerText = err.message; });
+    }
+
+    function login() {
+        const e = document.getElementById('l-email').value;
+        const p = document.getElementById('l-pass').value;
+        const msgBox = document.getElementById('msg-box-login');
+        if (!e || !p) { msgBox.style.color = "#ff4d4d"; msgBox.innerText = "Please enter email and password"; return; }
+
+        msgBox.style.color = "#00f3ff"; msgBox.innerText = "Logging in...";
+        auth.signInWithEmailAndPassword(e, p)
+        .then(() => {
+            document.getElementById('auth-screen').style.display='none';
+            document.getElementById('signup-screen').style.display='none';
+            document.getElementById('home-screen').style.display='block';
+        })
+        .catch(err => { msgBox.style.color = "#ff4d4d"; msgBox.innerText = err.message; });
+    }
+
+    function logout() { auth.signOut().then(() => location.reload()); }
+</script>
+
 </body>
 </html>
