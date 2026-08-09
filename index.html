@@ -21,7 +21,7 @@
     <h1>Login to Daksh Studio</h1>
     <input type="email" id="l-email" placeholder="Email">
     <input type="password" id="l-pass" placeholder="Password">
-    <button class="btn" onclick="login()">Login</button>
+    <button type="button" class="btn" onclick="login()">Login</button>
     <p>Don't have an account? <span class="link" onclick="showSignup()">Sign Up</span></p>
 </div>
 
@@ -30,7 +30,7 @@
     <h1>Create Account</h1>
     <input type="email" id="s-email" placeholder="Email">
     <input type="password" id="s-pass" placeholder="Password">
-    <button class="btn" onclick="signup()">Register</button>
+    <button type="button" class="btn" onclick="signup()">Register</button>
     <p>Already have an account? <span class="link" onclick="showLogin()">Login</span></p>
 </div>
 
@@ -40,9 +40,9 @@
     <div class="card">
         <h3>Find Jobs</h3>
         <input type="text" placeholder="Enter City...">
-        <button class="btn">Search Jobs</button>
+        <button type="button" class="btn">Search Jobs</button>
     </div>
-    <button onclick="logout()">Logout</button>
+    <button type="button" onclick="logout()" class="btn" style="background:#444;">Logout</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -86,16 +86,21 @@ const analytics = getAnalytics(app);",
     function signup() {
         const e = document.getElementById('s-email').value;
         const p = document.getElementById('s-pass').value;
-        auth.createUserWithEmailAndPassword(e, p).then(() => alert("Account Created!")).catch(err => alert(err.message));
+        auth.createUserWithEmailAndPassword(e, p)
+        .then(() => alert("Account Created! Now login."))
+        .catch(err => alert(err.message));
     }
 
     function login() {
         const e = document.getElementById('l-email').value;
         const p = document.getElementById('l-pass').value;
-        auth.signInWithEmailAndPassword(e, p).then(() => {
+        auth.signInWithEmailAndPassword(e, p)
+        .then(() => {
             document.getElementById('auth-screen').style.display='none';
+            document.getElementById('signup-screen').style.display='none';
             document.getElementById('home-screen').style.display='block';
-        }).catch(err => alert(err.message));
+        })
+        .catch(err => alert(err.message));
     }
 
     function logout() { auth.signOut().then(() => location.reload()); }
