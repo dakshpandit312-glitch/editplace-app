@@ -9,8 +9,9 @@
         .container { padding: 20px; }
         .card { background: #1a1a24; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #2a2a35; }
         .btn { background: linear-gradient(90deg, #00f3ff, #b026ff); border: none; padding: 12px; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
-        #home-screen { display: none; }
+        #home-screen, #signup-screen { display: none; }
         input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #333; background: #0d0d12; color: white; }
+        .link { color: #00f3ff; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -18,33 +19,30 @@
 <!-- LOGIN SCREEN -->
 <div id="auth-screen" class="container">
     <h1>Login to Daksh Studio</h1>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="pass" placeholder="Password">
+    <input type="email" id="l-email" placeholder="Email">
+    <input type="password" id="l-pass" placeholder="Password">
     <button class="btn" onclick="login()">Login</button>
+    <p>Don't have an account? <span class="link" onclick="showSignup()">Sign Up</span></p>
+</div>
+
+<!-- SIGNUP SCREEN -->
+<div id="signup-screen" class="container">
+    <h1>Create Account</h1>
+    <input type="email" id="s-email" placeholder="Email">
+    <input type="password" id="s-pass" placeholder="Password">
+    <button class="btn" onclick="signup()">Register</button>
+    <p>Already have an account? <span class="link" onclick="showLogin()">Login</span></p>
 </div>
 
 <!-- HOME SCREEN -->
 <div id="home-screen" class="container">
-    <nav style="display:flex; justify-content:space-between; align-items:center;">
-        <h2>Daksh Studio</h2>
-        <button onclick="logout()" style="background:transparent; border:1px solid #444; color:white; padding:5px 10px; cursor:pointer;">Logout</button>
-    </nav>
-    
+    <h2>Welcome to Daksh Studio</h2>
     <div class="card">
-        <h3>Profile Settings</h3>
-        <p>Edit your portfolio and studio details here.</p>
-        <button class="btn">Update Profile</button>
-    </div>
-
-    <div class="card">
-        <h3>Find Jobs by Location</h3>
-        <input type="text" placeholder="Enter City (e.g. Khandwa, Indore)">
+        <h3>Find Jobs</h3>
+        <input type="text" placeholder="Enter City...">
         <button class="btn">Search Jobs</button>
-        <div id="job-list" style="margin-top:15px;">
-            <p>• Video Editor - Khandwa</p>
-            <p>• Graphic Designer - Indore</p>
-        </div>
     </div>
+    <button onclick="logout()">Logout</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -82,15 +80,22 @@ const analytics = getAnalytics(app);",
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
+    function showSignup() { document.getElementById('auth-screen').style.display='none'; document.getElementById('signup-screen').style.display='block'; }
+    function showLogin() { document.getElementById('signup-screen').style.display='none'; document.getElementById('auth-screen').style.display='block'; }
+
+    function signup() {
+        const e = document.getElementById('s-email').value;
+        const p = document.getElementById('s-pass').value;
+        auth.createUserWithEmailAndPassword(e, p).then(() => alert("Account Created!")).catch(err => alert(err.message));
+    }
+
     function login() {
-        const e = document.getElementById('email').value;
-        const p = document.getElementById('pass').value;
-        auth.signInWithEmailAndPassword(e, p)
-        .then(() => {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('home-screen').style.display = 'block';
-        })
-        .catch(err => alert(err.message));
+        const e = document.getElementById('l-email').value;
+        const p = document.getElementById('l-pass').value;
+        auth.signInWithEmailAndPassword(e, p).then(() => {
+            document.getElementById('auth-screen').style.display='none';
+            document.getElementById('home-screen').style.display='block';
+        }).catch(err => alert(err.message));
     }
 
     function logout() { auth.signOut().then(() => location.reload()); }
