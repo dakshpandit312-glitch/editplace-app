@@ -3,56 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editplace - Daksh Editor</title>
+    <title>Daksh Studio - Job Portal</title>
     <style>
-        :root {
-            --bg-color: #0d0d12;
-            --card-bg: #1a1a24;
-            --text-main: #ffffff;
-            --text-muted: #a0a0b5;
-            --neon-blue: #00f3ff;
-            --neon-purple: #b026ff;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; height: 100vh; }
-        #auth-container { width: 100%; max-width: 400px; background-color: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid #2a2a35; text-align: center; }
-        h1 { font-size: 2rem; margin-bottom: 5px; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        p.subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; }
-        .input-group input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #2a2a35; background-color: #0d0d12; color: var(--text-main); outline: none; }
-        .auth-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .toggle-link { margin-top: 20px; font-size: 0.9rem; color: var(--text-muted); }
-        .toggle-link span { color: var(--neon-blue); cursor: pointer; font-weight: bold; }
-        #signup-form { display: none; }
+        body { background: #0d0d12; color: white; font-family: sans-serif; margin: 0; }
+        .container { padding: 20px; }
+        .card { background: #1a1a24; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #2a2a35; }
+        .btn { background: linear-gradient(90deg, #00f3ff, #b026ff); border: none; padding: 12px; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+        #home-screen { display: none; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #333; background: #0d0d12; color: white; }
     </style>
 </head>
 <body>
 
-<div id="auth-container">
-    <div id="login-form">
-        <h1>Welcome Back</h1>
-        <p class="subtitle">Login to Daksh studio</p>
-        <div class="input-group"><label>Email</label><input type="email" id="login-email"></div>
-        <div class="input-group"><label>Password</label><input type="password" id="login-password"></div>
-        <button class="auth-btn" onclick="loginDemo()">Login</button>
-        <p class="toggle-link">New here? <span onclick="toggleForms()">Sign Up</span></p>
+<!-- LOGIN SCREEN -->
+<div id="auth-screen" class="container">
+    <h1>Login to Daksh Studio</h1>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="pass" placeholder="Password">
+    <button class="btn" onclick="login()">Login</button>
+</div>
+
+<!-- HOME SCREEN -->
+<div id="home-screen" class="container">
+    <nav style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Daksh Studio</h2>
+        <button onclick="logout()" style="background:transparent; border:1px solid #444; color:white; padding:5px 10px; cursor:pointer;">Logout</button>
+    </nav>
+    
+    <div class="card">
+        <h3>Profile Settings</h3>
+        <p>Edit your portfolio and studio details here.</p>
+        <button class="btn">Update Profile</button>
     </div>
 
-    <div id="signup-form">
-        <h1>Create Account</h1>
-        <p class="subtitle">Join Daksh studio</p>
-        <div class="input-group"><label>Full Name</label><input type="text" id="signup-name" placeholder="Daksh studio"></div>
-        <div class="input-group"><label>Email</label><input type="email" id="signup-email"></div>
-        <div class="input-group"><label>Password</label><input type="password" id="signup-password"></div>
-        <button class="auth-btn" onclick="signupDemo()">Create Account</button>
-        <p class="toggle-link">Have an account? <span onclick="toggleForms()">Login</span></p>
+    <div class="card">
+        <h3>Find Jobs by Location</h3>
+        <input type="text" placeholder="Enter City (e.g. Khandwa, Indore)">
+        <button class="btn">Search Jobs</button>
+        <div id="job-list" style="margin-top:15px;">
+            <p>• Video Editor - Khandwa</p>
+            <p>• Graphic Designer - Indore</p>
+        </div>
     </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-
 <script>
     const firebaseConfig = {
         apiKey: "// Import the functions you need from the SDKs you need
@@ -75,36 +71,30 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);",
+const analytics = getAnalytics(app);", 
         authDomain: "editplace.firebaseapp.com",
         projectId: "editplace",
         storageBucket: "editplace.firebasestorage.app",
         messagingSenderId: "21549352163",
-        appId: "1:21549352163:web:f10232d465a309d352f1d6",
-        measurementId: "G-DKLXKNFB1H"
+        appId: "1:21549352163:web:f10232d465a309d352f1d6"
     };
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    function toggleForms() {
-        const l = document.getElementById('login-form'), s = document.getElementById('signup-form');
-        l.style.display = (l.style.display === 'none') ? 'block' : 'none';
-        s.style.display = (s.style.display === 'none') ? 'block' : 'none';
+    function login() {
+        const e = document.getElementById('email').value;
+        const p = document.getElementById('pass').value;
+        auth.signInWithEmailAndPassword(e, p)
+        .then(() => {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('home-screen').style.display = 'block';
+        })
+        .catch(err => alert(err.message));
     }
 
-    function signupDemo() {
-        const e = document.getElementById('signup-email').value, p = document.getElementById('signup-password').value, n = document.getElementById('signup-name').value;
-        auth.createUserWithEmailAndPassword(e, p).then(() => alert("Welcome " + n + "! Account Created.")).catch(e => alert(e.message));
-    }
-
-    function loginDemo() {
-        const e = document.getElementById('login-email').value, p = document.getElementById('login-password').value;
-        auth.signInWithEmailAndPassword(e, p).then(() => alert("Login Success!")).catch(e => alert(e.message));
-    }
+    function logout() { auth.signOut().then(() => location.reload()); }
 </script>
 
 </body>
 </html>
-
-            
